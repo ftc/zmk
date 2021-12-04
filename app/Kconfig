@@ -320,6 +320,20 @@ config ZMK_RGB_UNDERGLOW_ON_START
 #ZMK_RGB_UNDERGLOW
 endif
 
+config ZMK_ANIMATION
+	bool "RGB Animations"
+	select LED_STRIP
+
+if ZMK_ANIMATION
+
+config ZMK_ANIMATION_FPS
+	int "Animation FPS"
+	range 0 60
+	default 30
+
+#ZMK_ANIMATION
+endif
+
 #Display/LED Options
 endmenu
 
