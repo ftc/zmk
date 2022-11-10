@@ -5,9 +5,11 @@
  */
 
 #include <zmk/display/widgets/output_status.h>
+#include <zmk/display/widgets/peripheral_status.h>
 #include <zmk/display/widgets/battery_status.h>
 #include <zmk/display/widgets/layer_status.h>
 #include <zmk/display/widgets/wpm_status.h>
+#include <zmk/display/widgets/bongo_cat.h>
 #include <zmk/display/status_screen.h>
 
 #include <logging/log.h>
@@ -21,12 +23,20 @@ static struct zmk_widget_battery_status battery_status_widget;
 static struct zmk_widget_output_status output_status_widget;
 #endif
 
+#if IS_ENABLED(CONFIG_ZMK_WIDGET_PERIPHERAL_STATUS)
+static struct zmk_widget_peripheral_status peripheral_status_widget;
+#endif
+
 #if IS_ENABLED(CONFIG_ZMK_WIDGET_LAYER_STATUS)
 static struct zmk_widget_layer_status layer_status_widget;
 #endif
 
 #if IS_ENABLED(CONFIG_ZMK_WIDGET_WPM_STATUS)
 static struct zmk_widget_wpm_status wpm_status_widget;
+#endif
+
+#if IS_ENABLED(CONFIG_ZMK_WIDGET_BONGO_CAT)
+static struct zmk_widget_bongo_cat bongo_cat_widget;
 #endif
 
 lv_obj_t *zmk_display_status_screen() {
@@ -46,6 +56,12 @@ lv_obj_t *zmk_display_status_screen() {
                  0);
 #endif
 
+#if IS_ENABLED(CONFIG_ZMK_WIDGET_PERIPHERAL_STATUS)
+    zmk_widget_peripheral_status_init(&peripheral_status_widget, screen);
+    lv_obj_align(zmk_widget_peripheral_status_obj(&peripheral_status_widget), NULL,
+                 LV_ALIGN_IN_TOP_LEFT, 0, 0);
+#endif
+
 #if IS_ENABLED(CONFIG_ZMK_WIDGET_LAYER_STATUS)
     zmk_widget_layer_status_init(&layer_status_widget, screen);
     lv_obj_set_style_local_text_font(zmk_widget_layer_status_obj(&layer_status_widget),
@@ -57,8 +73,12 @@ lv_obj_t *zmk_display_status_screen() {
 
 #if IS_ENABLED(CONFIG_ZMK_WIDGET_WPM_STATUS)
     zmk_widget_wpm_status_init(&wpm_status_widget, screen);
-    lv_obj_align(zmk_widget_wpm_status_obj(&wpm_status_widget), NULL, LV_ALIGN_IN_BOTTOM_RIGHT, -12,
+    lv_obj_align(zmk_widget_wpm_status_obj(&wpm_status_widget), NULL, LV_ALIGN_IN_BOTTOM_RIGHT, 0,
                  0);
+#endif
+#if IS_ENABLED(CONFIG_ZMK_WIDGET_BONGO_CAT)
+    zmk_widget_bongo_cat_init(&bongo_cat_widget, screen);
+    lv_obj_align(zmk_widget_bongo_cat_obj(&bongo_cat_widget), NULL, LV_ALIGN_IN_BOTTOM_RIGHT, 0, 0);
 #endif
     return screen;
 }
