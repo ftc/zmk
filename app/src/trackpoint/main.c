@@ -43,16 +43,6 @@ struct k_work_q *zmk_trackpoint_work_q() {
     return &trackpoint_work_q;
 }
 
-void my_timer_handler(struct k_timer *dummy)
-{
-    // Resolve the read early
-    k_mutex_lock(&readMutex, K_FOREVER);
-    k_condvar_signal(&readBitRes);
-    k_mutex_unlock(&readMutex);
-}
-
-K_TIMER_DEFINE(my_timer, my_timer_handler, NULL);
-
 static void read_data_bit(const struct device *gpio,
                        struct gpio_callback *cb, uint32_t pins)
 {
@@ -154,12 +144,8 @@ uint8_t read(void) {
     // Ready to receive
     gohi(TP_CLK_PIN);
     gohi(TP_DAT_PIN);
-    // Let's make it timeout if it takes too long
-    k_timer_start(&my_timer, K_MSEC(5), K_NO_WAIT);
     // Wait for the read to finish (reads 11 bytes, stores 8)
-    k_condvar_wait(&readBitRes, &readMutex, K_FOREVER);
-    // Stop the timer
-    k_timer_stop(&my_timer);
+    k_condvar_wait(&readBitRes, &readMutex, K_MSEC(5));
     // No need to be interrupting now
     gpio_pin_interrupt_configure(gpiodev, TP_CLK_PIN, GPIO_INT_DISABLE);
     // hold up incoming data
