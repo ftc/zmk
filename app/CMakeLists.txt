@@ -75,6 +75,13 @@ endif()
 target_sources_ifdef(CONFIG_ZMK_RGB_UNDERGLOW app PRIVATE src/behaviors/behavior_rgb_underglow.c)
 target_sources_ifdef(CONFIG_ZMK_BACKLIGHT app PRIVATE src/behaviors/behavior_backlight.c)
 
+target_sources_ifdef(CONFIG_ZMK_ANIMATION app PRIVATE src/animation/color.c)
+target_sources_ifdef(CONFIG_ZMK_ANIMATION app PRIVATE src/animation/animation_compose.c)
+target_sources_ifdef(CONFIG_ZMK_ANIMATION app PRIVATE src/animation/animation_control.c)
+target_sources_ifdef(CONFIG_ZMK_ANIMATION app PRIVATE src/animation/animation_ripple.c)
+target_sources_ifdef(CONFIG_ZMK_ANIMATION app PRIVATE src/animation/animation_solid.c)
+target_sources_ifdef(CONFIG_ZMK_ANIMATION app PRIVATE src/animation/animation.c)
+target_sources_ifdef(CONFIG_ZMK_ANIMATION app PRIVATE src/behaviors/behavior_animation.c)
 target_sources_ifdef(CONFIG_ZMK_BLE app PRIVATE src/events/battery_state_changed.c)
 target_sources_ifdef(CONFIG_ZMK_BLE app PRIVATE src/battery.c)
 
